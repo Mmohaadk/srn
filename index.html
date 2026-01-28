@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Sim Racing Nigeria Application</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Bootstrap Icons -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+
+<style>
+/* Body & Background */
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+    background-color: #000;
+    background-image: url('wall.png');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+}
+
+/* Glass Card */
+.glass-wrapper {
+    max-width: 420px;
+    margin: 40px auto 20px;
+    border-radius: 28px;
+    padding: 2px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.4), rgba(255,255,255,0.05));
+}
+
+.glass-card {
+    border-radius: 26px;
+    padding: 20px;
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(38px) saturate(180%);
+    box-shadow: 0 40px 80px rgba(0,0,0,0.4);
+    color: #fff;
+}
+
+/* Form Fields */
+.form-control, .form-control:focus {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 12px;
+    color: #fff;
+}
+
+.payment-box img.qr {
+    width: 50%;          /* default size */
+    max-width: 200px;    /* won’t exceed this */
+    height: auto;        /* maintain aspect ratio */
+    margin: 12px auto;
+    display: block;      /* center */
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(125,249,255,0.6);
+}
+
+/* Smaller screens */
+@media (max-width: 500px) {
+    .payment-box img.qr {
+        width: 70%;       /* occupy more space on small screens */
+        max-width: 150px;
+    }
+}
+
+
+label {
+    font-size: 12px;
+    margin-bottom: 4px;
+    opacity: 0.85;
+}
+
+/* Button */
+button#proceedBtn {
+    margin-top: 10px;
+    padding: 12px;
+    border-radius: 16px;
+    border: none;
+    background: linear-gradient(135deg, #4da3ff, #007bff);
+    color: #fff;
+    font-weight: 600;
+    cursor: not-allowed;
+    opacity: 0.5;
+    transition: opacity 0.3s, box-shadow 0.3s;
+}
+button#proceedBtn.enabled {
+    cursor: pointer;
+    opacity: 1;
+    box-shadow: 0 0 15px rgba(77,163,255,0.6);
+}
+
+/* Payment Box */
+.payment-box {
+    display: none;
+    opacity: 0;
+    text-align: center;
+    width: 100%;
+    max-width: 500px;
+    margin: 20px auto;
+    padding: 20px;
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    transition: opacity 0.5s ease;
+    box-shadow: 0 0 40px rgba(125,249,255,0.5);
+}
+.payment-box.show {
+    display: block;
+    opacity: 1;
+}
+
+/* Social Icons */
+.social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    margin: 30px 0;
+}
+
+.social-icons a {
+    text-decoration: none;
+}
+
+.social-icons .icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(25px) saturate(180%);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+
+    --glow-color: #4da3ff;
+    animation: neonGlow 2.5s infinite alternate, floatUpDown 3s ease-in-out infinite;
+}
+
+.social-icons .icon:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 25px var(--glow-color), 0 0 45px var(--glow-color);
+}
+
+.social-icons .icon i {
+    font-size: 28px;
+    color: #fff;
+}
+
+/* Neon glow animation */
+@keyframes neonGlow {
+    0% { box-shadow: 0 0 6px var(--glow-color), 0 0 12px rgba(0,0,0,0.2); }
+    50% { box-shadow: 0 0 14px var(--glow-color), 0 0 28px rgba(0,0,0,0.3); }
+    100% { box-shadow: 0 0 6px var(--glow-color), 0 0 12px rgba(0,0,0,0.2); }
+}
+
+/* Floating animation */
+@keyframes floatUpDown {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+    100% { transform: translateY(0); }
+}
+
+/* Footer */
+footer.glass-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px 20px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    margin: 20px auto;
+    max-width: 95%;
+    color: #fff;
+    border-top: 1px solid rgba(255,255,255,0.25);
+}
+
+footer.glass-bar img {
+    max-height: 40px;
+}
+
+/* Responsive */
+@media (max-width: 500px) {
+    .social-icons .icon { width: 45px; height: 45px; }
+    .social-icons .icon i { font-size: 22px; }
+}
+</style>
+</head>
+
+<body>
+<main>
+    <div class="glass-wrapper">
+        <div class="glass-card">
+
+            <!-- Form Step -->
+            <h2 class="text-center mb-3">SRN Application</h2>
+            <form id="applicationForm" class="row g-3">
+
+                <div class="col-md-6">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" class="form-control" id="fullName">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email">
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Phone Number</label>
+                    <input type="text" class="form-control" id="phone">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Date of Birth</label>
+                    <input type="date" class="form-control" id="dob">
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">State</label>
+                    <input type="text" class="form-control" id="country">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">City</label>
+                    <input type="text" class="form-control" id="city">
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label">Why do you want to join Sim Racing Nigeria?</label>
+                    <textarea class="form-control" id="about" rows="3"></textarea>
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label">YouTube Introduction Link (optional)</label>
+                    <input type="text" class="form-control" id="youtube">
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label">Upload 1‑Minute Video (MP4, max 100MB)</label>
+                    <input type="file" class="form-control" id="video" accept="video/mp4">
+                </div>
+
+                <div class="col-12 text-center">
+                    <button type="button" id="proceedBtn">Subit</button>
+                </div>
+            </form>
+
+            <!-- Payment Step -->
+            <div id="paymentStep" class="payment-box text-center">
+                <h2>Community Invite</h2>
+                <p>Scan QR to join</p>
+                <img src="qr-9urWWGT5LjTaY1ngTqgM58PHijNhhRojVu9H3LyJurMQ.png" class="qr mb-2">
+                <p><strong></strong><br></p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Social Icons outside the form, clickable -->
+    <div class="social-icons">
+        <a href="https://discord.gg/VZ9Zf7WedJ" target="_blank"><div class="icon" style="--glow-color:#5865F2;"><i class="bi bi-discord"></i></div></a>
+        <a href="https://www.twitch.tv/" target="_blank"><div class="icon" style="--glow-color:#9146FF;"><i class="bi bi-twitch"></i></div></a>
+        <a href="https://www.instagram.com/simracing_ng" target="_blank"><div class="icon" style="--glow-color:#E1306C;"><i class="bi bi-instagram"></i></div></a>
+        <a href="https://www.whatsapp.com/" target="_blank"><div class="icon" style="--glow-color:#25D366;"><i class="bi bi-whatsapp"></i></div></a>
+    </div>
+
+</main>
+
+<footer class="glass-bar">
+    <img src="Artboard 2 copy 5.png">
+    <p>© 2025 SRN</p>
+</footer>
+
+<script>
+// Form validation
+const fields = ["fullName","email","phone","dob","country","city","about"].map(id => document.getElementById(id));
+const btn = document.getElementById("proceedBtn");
+const formStep = document.getElementById("applicationForm");
+const paymentStep = document.getElementById("paymentStep");
+
+fields.forEach(f => f.addEventListener("input", validate));
+
+function validate() {
+    const ok = fields.every(f => f.value.trim());
+    btn.classList.toggle("enabled", ok);
+}
+
+btn.addEventListener("click", async () => {
+    if (!btn.classList.contains("enabled")) return;
+
+    const payload = {
+        content: "**New SRN Application**",
+        embeds: [{
+            fields: [
+                { name: "Name", value: document.getElementById("fullName").value },
+                { name: "Email", value: document.getElementById("email").value },
+                { name: "Phone", value: document.getElementById("phone").value },
+                { name: "DOB", value: document.getElementById("dob").value },
+                { name: "Country / City", value: document.getElementById("country").value + ", " + document.getElementById("city").value },
+                { name: "About", value: document.getElementById("about").value },
+                { name: "YouTube", value: document.getElementById("youtube").value || "N/A" }
+            ]
+        }]
+    };
+
+    try {
+        await fetch("https://discord.com/api/webhooks/930382598629376010/EnSOqAYRTlZT2zbX7rhg-oOvIgDPsRBlM44Ot2vVsyWwUokNUxvrdQKc6HJHhKpeT1P0", { // put your webhook here
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        });
+
+        formStep.style.display = "none";
+        paymentStep.classList.add("show");
+        paymentStep.scrollIntoView({ behavior: 'smooth' });
+    } catch (err) {
+        console.error("Failed to send:", err);
+        alert("Something went wrong. Please try again.");
+    }
+});
+</script>
+
+</body>
+</html>
